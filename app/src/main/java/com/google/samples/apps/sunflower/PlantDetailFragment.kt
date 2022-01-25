@@ -43,7 +43,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PlantDetailFragment : Fragment() {
 
-    private val plantDetailViewModel: PlantDetailViewModel by viewModels()
+    private val plantDetailViewModel: PlantDetailViewModel by viewModels() // 使用HiltViewModel来获取目标ViewModel（原理是使用Hilt提供的HiltViewModelFactory工厂类来创建的）
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,8 +57,8 @@ class PlantDetailFragment : Fragment() {
             container,
             false
         ).apply {
-            viewModel = plantDetailViewModel
-            lifecycleOwner = viewLifecycleOwner
+            viewModel = plantDetailViewModel // 设置layout文件中viewModel变量对应的对象
+            lifecycleOwner = viewLifecycleOwner // 设置生命周期为当前Fragment的生命周期
             callback = Callback { plant ->
                 plant?.let {
                     hideAppBarFab(fab)

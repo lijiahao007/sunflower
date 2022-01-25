@@ -34,7 +34,7 @@ buildscript {
         gsonVersion = '2.8.2'
         hiltVersion = '2.38.1'
         junitVersion = '4.12'
-        kotlinVersion = '1.4.30'
+        kotlinVersion = '1.6.10'
         ktlintVersion = '0.38.1'
         ktxVersion = '1.0.2'
         lifecycleVersion = '2.2.0'
@@ -53,6 +53,18 @@ buildscript {
     }
 
     repositories {
+        maven{
+            url "https://maven.aliyun.com/repository/central"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/public"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/gradle-plugin"
+        }
         google()
         mavenCentral()
     }
@@ -71,6 +83,18 @@ plugins {
 
 allprojects {
     repositories {
+        maven{
+            url "https://maven.aliyun.com/repository/central"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/public"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/gradle-plugin"
+        }
         google()
         mavenCentral()
     }

@@ -32,7 +32,7 @@ import com.google.samples.apps.sunflower.databinding.ListItemPhotoBinding
  * Adapter for the [RecyclerView] in [GalleryFragment].
  */
 
-class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(GalleryDiffCallback()) {
+    class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(GalleryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
         return GalleryViewHolder(
@@ -52,9 +52,10 @@ class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(Galle
     }
 
     class GalleryViewHolder(
-        private val binding: ListItemPhotoBinding
+        private val binding: ListItemPhotoBinding // 把ListItemPhoto的布局信息传入ViewHolder中，这样就可以不用每次取了。
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
+            // 设置整个Item的点击事件 --> 跳转详情页面
             binding.setClickListener { view ->
                 binding.photo?.let { photo ->
                     val uri = Uri.parse(photo.user.attributionUrl)
@@ -64,15 +65,19 @@ class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(Galle
             }
         }
 
+        // 为Item绑定图片
         fun bind(item: UnsplashPhoto) {
             binding.apply {
                 photo = item
+                // 更新所有绑定数值修改过的View
                 executePendingBindings()
             }
         }
     }
 }
 
+
+// 一个
 private class GalleryDiffCallback : DiffUtil.ItemCallback<UnsplashPhoto>() {
     override fun areItemsTheSame(oldItem: UnsplashPhoto, newItem: UnsplashPhoto): Boolean {
         return oldItem.id == newItem.id

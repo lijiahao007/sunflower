@@ -63,6 +63,7 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
             plant: Plant,
             view: View
         ) {
+            //
             val direction =
                 HomeViewPagerFragmentDirections.actionViewPagerFragmentToPlantDetailFragment(
                     plant.plantId

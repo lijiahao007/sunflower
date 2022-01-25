@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 class GalleryFragment : Fragment() {
 
     private val adapter = GalleryAdapter()
-    private val args: GalleryFragmentArgs by navArgs()
+    private val args: GalleryFragmentArgs by navArgs()  // 跳转时携带的参数
     private var searchJob: Job? = null
     private val viewModel: GalleryViewModel by viewModels()
 

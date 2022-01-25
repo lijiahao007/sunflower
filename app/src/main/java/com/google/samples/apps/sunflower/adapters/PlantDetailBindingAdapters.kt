@@ -27,6 +27,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.samples.apps.sunflower.R
 
+// 数据绑定适配器，能够在View中自定义一些属性。
+// 我们只需要在适配器中指定相关的逻辑即可
 @BindingAdapter("imageFromUrl")
 fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
     if (!imageUrl.isNullOrEmpty()) {

@@ -19,6 +19,7 @@ package com.google.samples.apps.sunflower.adapters
 import android.view.View
 import androidx.databinding.BindingAdapter
 
+// 给View加个属性 “isGone”, 用来决定View的显示和隐藏
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
     view.visibility = if (isGone) {
