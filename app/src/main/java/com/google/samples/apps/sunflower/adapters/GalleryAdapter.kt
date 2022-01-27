@@ -32,7 +32,8 @@ import com.google.samples.apps.sunflower.databinding.ListItemPhotoBinding
  * Adapter for the [RecyclerView] in [GalleryFragment].
  */
 
-    class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(GalleryDiffCallback()) {
+    // PagingDataAdapter ：RecyclerView.Adapter的子类。 Paging组件中专门在RecycleView中显示分页数据的适配器
+class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(GalleryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
         return GalleryViewHolder(
@@ -77,7 +78,7 @@ import com.google.samples.apps.sunflower.databinding.ListItemPhotoBinding
 }
 
 
-// 一个
+// 用来对比新旧Item是否相同
 private class GalleryDiffCallback : DiffUtil.ItemCallback<UnsplashPhoto>() {
     override fun areItemsTheSame(oldItem: UnsplashPhoto, newItem: UnsplashPhoto): Boolean {
         return oldItem.id == newItem.id

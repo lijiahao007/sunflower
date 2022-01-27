@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
 import com.google.samples.apps.sunflower.adapters.GardenPlantingAdapter
 import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
@@ -55,8 +54,12 @@ class GardenFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentGardenBinding) {
+        // GardenPlantingListViewModel 中
+        // plantAndGardenPlantings ”我的花园“ 植物列表发生变化时的操作
         viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner) { result ->
+            // 1. 修改参数 hasPlantings
             binding.hasPlantings = !result.isNullOrEmpty()
+            // 2. 将新的列表传入ListAdapter中
             adapter.submitList(result)
         }
     }

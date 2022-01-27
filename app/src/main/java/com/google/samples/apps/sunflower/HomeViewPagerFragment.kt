@@ -29,6 +29,7 @@ import com.google.samples.apps.sunflower.adapters.SunflowerPagerAdapter
 import com.google.samples.apps.sunflower.databinding.FragmentViewPagerBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+// 这个Fragment用来设置ViewPager， 总共两个Pager，一个是我的花园(GardenFragment)，一个是植物目录(GalleryFragment)
 @AndroidEntryPoint
 class HomeViewPagerFragment : Fragment() {
 
@@ -41,9 +42,11 @@ class HomeViewPagerFragment : Fragment() {
         val tabLayout = binding.tabs
         val viewPager = binding.viewPager
 
+        // 为ViewPager设置适配器，插入子Fragment
         viewPager.adapter = SunflowerPagerAdapter(this)
 
         // Set the icon and text for each tab
+        // 关联“TabLayout” 与 ViewPager
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.setIcon(getTabIcon(position))
             tab.text = getTabTitle(position)
@@ -54,6 +57,7 @@ class HomeViewPagerFragment : Fragment() {
         return binding.root
     }
 
+    // 根据位置获取Tab选项的图标
     private fun getTabIcon(position: Int): Int {
         return when (position) {
             MY_GARDEN_PAGE_INDEX -> R.drawable.garden_tab_selector
@@ -62,6 +66,7 @@ class HomeViewPagerFragment : Fragment() {
         }
     }
 
+    // 根据位置获取Tab选项的标题
     private fun getTabTitle(position: Int): String? {
         return when (position) {
             MY_GARDEN_PAGE_INDEX -> getString(R.string.my_garden_title)

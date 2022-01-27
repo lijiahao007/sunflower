@@ -113,6 +113,7 @@ class PlantDetailFragment : Fragment() {
         return binding.root
     }
 
+    //
     private fun navigateToGallery() {
         plantDetailViewModel.plant.value?.let { plant ->
             val direction =

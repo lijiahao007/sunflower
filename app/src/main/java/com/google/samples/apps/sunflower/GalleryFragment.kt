@@ -53,7 +53,7 @@ class GalleryFragment : Fragment() {
         search(args.plantName)
 
         binding.toolbar.setNavigationOnClickListener { view ->
-            view.findNavController().navigateUp()
+            view.findNavController().navigateUp() // 返回上一个目的地、并销毁栈顶目的地
         }
 
         return binding.root

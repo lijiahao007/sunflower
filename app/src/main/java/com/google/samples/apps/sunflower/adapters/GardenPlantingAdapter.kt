@@ -32,7 +32,7 @@ import com.google.samples.apps.sunflower.viewmodels.PlantAndGardenPlantingsViewM
 
 class GardenPlantingAdapter :
     ListAdapter<PlantAndGardenPlantings, GardenPlantingAdapter.ViewHolder>(
-        GardenPlantDiffCallback()
+        GardenPlantDiffCallback() // 用来判断一个列表中的两个非空对象是否相等
     ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,27 +54,34 @@ class GardenPlantingAdapter :
         private val binding: ListItemGardenPlantingBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
+            // 为 MaskedCardView 设置点击监听器
             binding.setClickListener { view ->
                 binding.viewModel?.plantId?.let { plantId ->
+                    // 跳转到植物详情页面，并给详情页面传入 plantId 作为参数
                     navigateToPlant(plantId, view)
                 }
             }
         }
 
         private fun navigateToPlant(plantId: String, view: View) {
+            // 跳转到植物详细信息界面
             val direction = HomeViewPagerFragmentDirections
                 .actionViewPagerFragmentToPlantDetailFragment(plantId)
             view.findNavController().navigate(direction)
         }
 
+        // 将植物绑定到布局变量ViewModel中，并更新视图
         fun bind(plantings: PlantAndGardenPlantings) {
             with(binding) {
+                // 创建ViewModel并赋予布局文件中的viewModel
                 viewModel = PlantAndGardenPlantingsViewModel(plantings)
+                // 绑定的数据更改时，更新View
                 executePendingBindings()
             }
         }
     }
 }
+
 
 private class GardenPlantDiffCallback : DiffUtil.ItemCallback<PlantAndGardenPlantings>() {
 
@@ -82,6 +89,7 @@ private class GardenPlantDiffCallback : DiffUtil.ItemCallback<PlantAndGardenPlan
         oldItem: PlantAndGardenPlantings,
         newItem: PlantAndGardenPlantings
     ): Boolean {
+        // plantId 是判断列表中Item是否相同的依据
         return oldItem.plant.plantId == newItem.plant.plantId
     }
 
@@ -89,6 +97,7 @@ private class GardenPlantDiffCallback : DiffUtil.ItemCallback<PlantAndGardenPlan
         oldItem: PlantAndGardenPlantings,
         newItem: PlantAndGardenPlantings
     ): Boolean {
+        // 判断两个Item是否内容相同
         return oldItem.plant == newItem.plant
     }
 }

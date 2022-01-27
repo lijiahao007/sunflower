@@ -42,6 +42,12 @@
             android:fitsSystemWindows="true"
             android:theme="@style/Theme.Sunflower.AppBarOverlay">
 
+<!--
+            响应滚动的Toolbar布局
+            layout_scrollFlags:
+                scroll -> 此布局与滚动关联
+                snap   -> 滚动结束后，如果布局可见，则展开；如果不可见，则收缩
+-->
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"

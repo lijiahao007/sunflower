@@ -40,6 +40,7 @@
         android:label="@string/plant_details_title"
         tools:layout="@layout/fragment_plant_detail">
 
+        <!-- 设置跳转方向和参数 -->
         <action
             android:id="@+id/action_plant_detail_fragment_to_gallery_fragment"
             app:destination="@id/gallery_fragment"
