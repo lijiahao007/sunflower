@@ -20,10 +20,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+<!--    如果没有植物，那么RecyclerView就会隐藏-->
         <variable
                 name="hasPlantings"
                 type="boolean" />
+
 
     </data>
 

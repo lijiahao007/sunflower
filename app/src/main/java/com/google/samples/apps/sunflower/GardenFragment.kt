@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.samples.apps.sunflower.adapters.GardenPlantingAdapter
 import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
@@ -45,6 +46,7 @@ class GardenFragment : Fragment() {
         val adapter = GardenPlantingAdapter()
         binding.gardenList.adapter = adapter
 
+        // 当我的花园为空时，显示按钮appPlant, 点击按钮跳转植物列表
         binding.addPlant.setOnClickListener {
             navigateToPlantListPage()
         }
@@ -54,8 +56,8 @@ class GardenFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentGardenBinding) {
-        // GardenPlantingListViewModel 中
-        // plantAndGardenPlantings ”我的花园“ 植物列表发生变化时的操作
+        // 监听 GardenPlantingListViewModel 中  plantAndGardenPlantings ”我的花园“ 植物列表发生的变化
+        // 当发生变化时，就修改展示的列表
         viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner) { result ->
             // 1. 修改参数 hasPlantings
             binding.hasPlantings = !result.isNullOrEmpty()
@@ -66,6 +68,7 @@ class GardenFragment : Fragment() {
 
     // TODO: convert to data binding if applicable
     private fun navigateToPlantListPage() {
+        // 通过修改GardenActivity中的ViewPager.currentItem来进行跳转
         requireActivity().findViewById<ViewPager2>(R.id.view_pager).currentItem =
             PLANT_LIST_PAGE_INDEX
     }

@@ -37,13 +37,15 @@ import javax.inject.Inject
 @HiltViewModel
 class PlantListViewModel @Inject internal constructor(
     plantRepository: PlantRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle // 是一个包含键值对的对象，由ViewModel工厂提供，用来获取 onSaveInstanceState 保存的界面状态
 ) : ViewModel() {
 
+    // 从onSaveInstanceState中获取 GROW_ZONE_SAVED_STATE_KEY
     private val growZone: MutableStateFlow<Int> = MutableStateFlow(
-        savedStateHandle.get(GROW_ZONE_SAVED_STATE_KEY) ?: NO_GROW_ZONE
+            savedStateHandle.get(GROW_ZONE_SAVED_STATE_KEY) ?: NO_GROW_ZONE // 初始值从已保存状态中获取
     )
 
+    // 根据growZone（种植区域） 去获取植物。
     val plants: LiveData<List<Plant>> = growZone.flatMapLatest { zone ->
         if (zone == NO_GROW_ZONE) {
             plantRepository.getPlants()
@@ -81,6 +83,7 @@ class PlantListViewModel @Inject internal constructor(
          *        savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, newGrowZone)
          *    }.launchIn(viewModelScope)
          */
+        // 为growZone设置一个收集器协程
         viewModelScope.launch {
             growZone.collect { newGrowZone ->
                 savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, newGrowZone)

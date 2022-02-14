@@ -37,6 +37,7 @@ class GardenPlantingAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
+            // 传入 list_item 布局的 binding
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
                 R.layout.list_item_garden_planting,
@@ -73,7 +74,7 @@ class GardenPlantingAdapter :
         // 将植物绑定到布局变量ViewModel中，并更新视图
         fun bind(plantings: PlantAndGardenPlantings) {
             with(binding) {
-                // 创建ViewModel并赋予布局文件中的viewModel
+                //
                 viewModel = PlantAndGardenPlantingsViewModel(plantings)
                 // 绑定的数据更改时，更新View
                 executePendingBindings()

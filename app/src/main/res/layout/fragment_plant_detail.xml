@@ -46,6 +46,8 @@
             android:background="?attr/colorSurface"
             android:animateLayoutChanges="true">
 
+<!--        layout_scrollFlags = scroll|exitUntilCollapsed
+                当View被推出屏幕时，会跟着滑动，直到折叠到View的最小高度；同时只有在其他View(比如说RecyclerView)滑动到顶部才会展开。-->
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
@@ -70,6 +72,7 @@
                     app:imageFromUrl="@{viewModel.plant.imageUrl}"
                     app:layout_collapseMode="parallax" />
 
+<!--                该工具栏初始状体是透明的 -->
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
@@ -142,6 +145,8 @@
                     app:wateringText="@{viewModel.plant.wateringInterval}"
                     tools:text="every 7 days" />
 
+<!--                当有合法的 Unsplash Key 时，该图像不显示 -->
+<!--                该ImageView的作用是跳转到GalleryFragment-->
                 <ImageView
                     android:id="@+id/gallery_nav"
                     android:layout_width="wrap_content"

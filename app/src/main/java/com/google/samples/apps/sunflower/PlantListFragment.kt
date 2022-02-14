@@ -51,10 +51,12 @@ class PlantListFragment : Fragment() {
         return binding.root
     }
 
+    // 设置菜单
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_plant_list, menu)
     }
 
+    // 菜单项 可以设置 种植区域
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.filter_zone -> {
@@ -65,12 +67,14 @@ class PlantListFragment : Fragment() {
         }
     }
 
+    // 监听 viewModel中的plant LiveData，如果改变，就给ListAdapter提交新的列表
     private fun subscribeUi(adapter: PlantAdapter) {
         viewModel.plants.observe(viewLifecycleOwner) { plants ->
             adapter.submitList(plants)
         }
     }
 
+    // 设置viewModel 中的 zoneNumber
     private fun updateData() {
         with(viewModel) {
             if (isFiltered()) {
@@ -80,4 +84,5 @@ class PlantListFragment : Fragment() {
             }
         }
     }
+
 }

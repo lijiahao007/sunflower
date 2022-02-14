@@ -63,7 +63,7 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
             plant: Plant,
             view: View
         ) {
-            //
+            // 通过 Navigation 跳转到PlantDetailFragment
             val direction =
                 HomeViewPagerFragmentDirections.actionViewPagerFragmentToPlantDetailFragment(
                     plant.plantId
@@ -81,7 +81,7 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
 }
 
 private class PlantDiffCallback : DiffUtil.ItemCallback<Plant>() {
-
+    // 使用plantId 来区分两个元素是否相同
     override fun areItemsTheSame(oldItem: Plant, newItem: Plant): Boolean {
         return oldItem.plantId == newItem.plantId
     }

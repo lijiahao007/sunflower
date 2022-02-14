@@ -30,5 +30,7 @@ class GardenPlantingListViewModel @Inject internal constructor(
 ) : ViewModel() {
     val plantAndGardenPlantings: LiveData<List<PlantAndGardenPlantings>> =
         // 从GardenPlantingRepository中获取“我的花园”中的植物
+        // 从 garden_plantings 表中获取 “我的花园” 中的植物ID，
+        // 然后在 plants 表中获取具体的植物信息
         gardenPlantingRepository.getPlantedGardens().asLiveData()
 }

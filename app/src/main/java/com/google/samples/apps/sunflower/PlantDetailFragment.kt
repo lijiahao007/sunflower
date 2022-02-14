@@ -18,6 +18,7 @@ package com.google.samples.apps.sunflower
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,47 +58,64 @@ class PlantDetailFragment : Fragment() {
             container,
             false
         ).apply {
+            // 给布局文件中的变量设置对应元素
             viewModel = plantDetailViewModel // 设置layout文件中viewModel变量对应的对象
-            lifecycleOwner = viewLifecycleOwner // 设置生命周期为当前Fragment的生命周期
+            lifecycleOwner = viewLifecycleOwner // 设置数据绑定的生命周期
+
+            // 用作浮动按钮的点击事件， 实现Callback功能接口的add方法
             callback = Callback { plant ->
                 plant?.let {
+                    // 隐藏浮动按钮
                     hideAppBarFab(fab)
+                    // 将plantDetailViewModel中plantId 添加到 garden_plantings 表中
                     plantDetailViewModel.addPlantToGarden()
+                    // 显示添加成功的信息（root 是显示弹框的界面）
                     Snackbar.make(root, R.string.added_plant_to_garden, Snackbar.LENGTH_LONG)
                         .show()
                 }
             }
 
+            // 如果unsplash key 非法， 则可以通过该 ImageView 跳转到 GalleryFragment
             galleryNav.setOnClickListener { navigateToGallery() }
+
 
             var isToolbarShown = false
 
+            // 刚开始的 scrollY=0， 这时顶端的图片会全部显示
             // scroll change listener begins at Y = 0 when image is fully collapsed
             plantDetailScrollview.setOnScrollChangeListener(
-                NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+                NestedScrollView.OnScrollChangeListener { _, scrollX, scrollY, oldScrollX, oldScrollY ->
 
+                    // 当 NestedScrollView 向上滚动的距离达到 工具栏高度时，植物的名字会被遮盖，这时就将植物名字写在工具栏上。这时需要显示工具栏
                     // User scrolled past image to height of toolbar and the title text is
                     // underneath the toolbar, so the toolbar should be shown.
                     val shouldShowToolbar = scrollY > toolbar.height
+                    Log.i("OnScrollChangeListener", "$scrollX, $scrollY, $oldScrollX, $oldScrollY， toolbar.height=${toolbar.height}")
 
+                    // 更新工具栏的属性和状态
                     // The new state of the toolbar differs from the previous state; update
                     // appbar and toolbar attributes.
                     if (isToolbarShown != shouldShowToolbar) {
                         isToolbarShown = shouldShowToolbar
 
+                        // 使用阴影出现、淡出来 “激活”、“折叠” 工具栏
                         // Use shadow animator to add elevation if toolbar is shown
                         appbar.isActivated = shouldShowToolbar
 
+                        // 只有在上滑到隐藏植物名字时，标题中的植物名字才会显示
                         // Show the plant name if toolbar is shown
                         toolbarLayout.isTitleEnabled = shouldShowToolbar
                     }
                 }
             )
 
+            // 导航按钮的点击事件 （具体设置的图案是箭头）
             toolbar.setNavigationOnClickListener { view ->
+                // 返回操作
                 view.findNavController().navigateUp()
             }
 
+            // 设置 菜单项点击事件
             toolbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_share -> {
@@ -152,6 +170,7 @@ class PlantDetailFragment : Fragment() {
         fab.hide()
     }
 
+    // kotlin中的功能接口，只允许有一个非抽象成员方法
     fun interface Callback {
         fun add(plant: Plant?)
     }

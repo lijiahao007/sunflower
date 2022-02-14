@@ -38,12 +38,14 @@ class PlantDetailViewModel @Inject constructor(
     private val gardenPlantingRepository: GardenPlantingRepository,
 ) : ViewModel() {
 
+    // plantId, 从 savedInstanceState中获取。（什么时候存入的？）
     val plantId: String = savedStateHandle.get<String>(PLANT_ID_SAVED_STATE_KEY)!!
 
     val isPlanted = gardenPlantingRepository.isPlanted(plantId).asLiveData()
     val plant = plantRepository.getPlant(plantId).asLiveData()
 
     fun addPlantToGarden() {
+        // 开启协程，将plantId对应的植物添加到 “我的花园” 中
         viewModelScope.launch {
             gardenPlantingRepository.createGardenPlanting(plantId)
         }
