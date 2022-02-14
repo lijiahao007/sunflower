@@ -118,6 +118,7 @@ class PlantDetailFragment : Fragment() {
             // 设置 菜单项点击事件
             toolbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
+                    // 分享操作
                     R.id.action_share -> {
                         createShareIntent()
                         true
@@ -131,7 +132,7 @@ class PlantDetailFragment : Fragment() {
         return binding.root
     }
 
-    //
+    // 当 Unsplash Key 不合法时， 则可以直接去 Unsplash Gallery 查看植物图片
     private fun navigateToGallery() {
         plantDetailViewModel.plant.value?.let { plant ->
             val direction =
@@ -140,10 +141,12 @@ class PlantDetailFragment : Fragment() {
         }
     }
 
+
     // Helper function for calling a share functionality.
     // Should be used when user presses a share button/menu item.
     @Suppress("DEPRECATION")
     private fun createShareIntent() {
+        // 获取植物的名字
         val shareText = plantDetailViewModel.plant.value.let { plant ->
             if (plant == null) {
                 ""
@@ -151,11 +154,19 @@ class PlantDetailFragment : Fragment() {
                 getString(R.string.share_text_plant, plant.name)
             }
         }
+
+        // ShareCompact 是 便捷的程序间程序共享的组件
+        // 使用 ShareCompat.IntentBuilder 来创建用来分享数据的 Intent
         val shareIntent = ShareCompat.IntentBuilder.from(requireActivity())
-            .setText(shareText)
-            .setType("text/plain")
-            .createChooserIntent()
+            .setText(shareText) // 设置文本信息
+            .setType("text/plain") // 设置类型
+            .createChooserIntent() // 打开Android标准Activity选择器， 让用户选择要共享信息的Activity、App
+                // 设置了Flag ： Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                // FLAG_ACTIVITY_NEW_DOCUMENT :  不会为新的Activity 创建新的Task
+                // FLAG_ACTIVITY_MULTIPLE_TASK : 强制将Activity启动到一个新的task
+                // or : 按位或操作，结果是 134742016
             .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+
         startActivity(shareIntent)
     }
 
