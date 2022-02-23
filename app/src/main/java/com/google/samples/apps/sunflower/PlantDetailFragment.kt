@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.samples.apps.sunflower.PlantDetailFragment.Callback
@@ -51,7 +52,6 @@ class PlantDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         val binding = DataBindingUtil.inflate<FragmentPlantDetailBinding>(
             inflater,
             R.layout.fragment_plant_detail,
@@ -60,7 +60,8 @@ class PlantDetailFragment : Fragment() {
         ).apply {
             // 给布局文件中的变量设置对应元素
             viewModel = plantDetailViewModel // 设置layout文件中viewModel变量对应的对象
-            lifecycleOwner = viewLifecycleOwner // 设置数据绑定的生命周期
+            // 只有binding 设置了 lifecycleOwner， LiveData的更新才能够传播到UI那。 （即单向绑定）
+            lifecycleOwner = viewLifecycleOwner // 设置数据绑定的生命周期 (这里很关键)
 
             // 用作浮动按钮的点击事件， 实现Callback功能接口的add方法
             callback = Callback { plant ->
@@ -98,7 +99,7 @@ class PlantDetailFragment : Fragment() {
                     if (isToolbarShown != shouldShowToolbar) {
                         isToolbarShown = shouldShowToolbar
 
-                        // 使用阴影出现、淡出来 “激活”、“折叠” 工具栏
+                        // 使用阴影动画
                         // Use shadow animator to add elevation if toolbar is shown
                         appbar.isActivated = shouldShowToolbar
 
@@ -156,7 +157,7 @@ class PlantDetailFragment : Fragment() {
         }
 
         // ShareCompact 是 便捷的程序间程序共享的组件
-        // 使用 ShareCompat.IntentBuilder 来创建用来分享数据的 Intent
+        // 使用 ShareCompat.IntentBuilder 来创建开启其他应用或者Activity
         val shareIntent = ShareCompat.IntentBuilder.from(requireActivity())
             .setText(shareText) // 设置文本信息
             .setType("text/plain") // 设置类型
@@ -177,6 +178,8 @@ class PlantDetailFragment : Fragment() {
     private fun hideAppBarFab(fab: FloatingActionButton) {
         val params = fab.layoutParams as CoordinatorLayout.LayoutParams
         val behavior = params.behavior as FloatingActionButton.Behavior
+        // FloatActionButton 在布局文件中固定在了 AppBarLayout 底部，这样当滑动到一定位置时，FAB会自动隐藏和显示
+        // 我们需要将FloatingActionButton一直隐藏，那么就要取消自动隐藏和显示的“Behavior” (isAutoHideEnabled=false)
         behavior.isAutoHideEnabled = false
         fab.hide()
     }

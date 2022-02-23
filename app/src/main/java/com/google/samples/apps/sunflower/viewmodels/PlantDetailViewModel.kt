@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.sunflower.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -38,8 +39,12 @@ class PlantDetailViewModel @Inject constructor(
     private val gardenPlantingRepository: GardenPlantingRepository,
 ) : ViewModel() {
 
-    // plantId, 从 savedInstanceState中获取。（什么时候存入的？）
-    val plantId: String = savedStateHandle.get<String>(PLANT_ID_SAVED_STATE_KEY)!!
+    init{
+        Log.i("PlantDetailViewModel", "ViewModel create!!!!!")
+    }
+
+    // savedStateHandle 会自动填充 PlantDetailFragment 中 safeArgs的参数
+    var plantId: String = savedStateHandle.get<String>(PLANT_ID_SAVED_STATE_KEY)!!
 
     val isPlanted = gardenPlantingRepository.isPlanted(plantId).asLiveData()
     val plant = plantRepository.getPlant(plantId).asLiveData()
@@ -51,6 +56,7 @@ class PlantDetailViewModel @Inject constructor(
         }
     }
 
+    // 如果 gradle.properties 中有属性 unsplash_access_key 那么就算合法
     fun hasValidUnsplashKey() = (BuildConfig.UNSPLASH_ACCESS_KEY != "null")
 
     companion object {

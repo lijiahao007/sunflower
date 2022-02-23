@@ -32,6 +32,7 @@ import com.google.samples.apps.sunflower.workers.SeedDatabaseWorker.Companion.KE
 
 /**
  * The Room database for this app
+ * 该应用的 Room 数据库初始化
  */
 @Database(entities = [GardenPlanting::class, Plant::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)

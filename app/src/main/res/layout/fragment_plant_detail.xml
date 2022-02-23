@@ -181,6 +181,9 @@
 
         </androidx.core.widget.NestedScrollView>
 
+<!--       layout_anchor 将FAB固定到AppBarLayout下方
+           FAB 的可见性由滑动位置决定
+-->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             style="@style/Widget.MaterialComponents.FloatingActionButton"

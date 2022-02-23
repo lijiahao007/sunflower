@@ -29,7 +29,7 @@
         android:name="com.google.samples.apps.sunflower.HomeViewPagerFragment"
         tools:layout="@layout/fragment_view_pager">
 
-        <action
+         <action
                 android:id="@+id/action_view_pager_fragment_to_plant_detail_fragment"
                 app:destination="@id/plant_detail_fragment"
                 app:enterAnim="@anim/slide_in_right"

@@ -53,7 +53,7 @@ class GardenPlantingAdapter :
 
     class ViewHolder(
         private val binding: ListItemGardenPlantingBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+        ) : RecyclerView.ViewHolder(binding.root) {
         init {
             // 为 MaskedCardView 设置点击监听器
             binding.setClickListener { view ->
@@ -74,7 +74,7 @@ class GardenPlantingAdapter :
         // 将植物绑定到布局变量ViewModel中，并更新视图
         fun bind(plantings: PlantAndGardenPlantings) {
             with(binding) {
-                //
+                // 给 viewModel 赋值
                 viewModel = PlantAndGardenPlantingsViewModel(plantings)
                 // 绑定的数据更改时，更新View
                 executePendingBindings()

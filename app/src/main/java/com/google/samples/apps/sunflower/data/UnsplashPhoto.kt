@@ -26,6 +26,7 @@ import com.google.gson.annotations.SerializedName
  * [here](https://unsplash.com/documentation#get-a-photo).
  */
 data class UnsplashPhoto(
+    // Gson json 解析
     @field:SerializedName("id") val id: String,
     @field:SerializedName("urls") val urls: UnsplashPhotoUrls,
     @field:SerializedName("user") val user: UnsplashUser

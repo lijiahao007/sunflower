@@ -30,11 +30,16 @@ import javax.inject.Inject
 class GalleryViewModel @Inject constructor(
     private val repository: UnsplashRepository
 ) : ViewModel() {
+    // 下面两个为可空类型
+    // 记录当前查询的植物名
     private var currentQueryValue: String? = null
+    // 记录当前的查询结果
     private var currentSearchResult: Flow<PagingData<UnsplashPhoto>>? = null
 
+    // 用名字来搜索图片
     fun searchPictures(queryString: String): Flow<PagingData<UnsplashPhoto>> {
         currentQueryValue = queryString
+        // cachedIn: 使数据流在 viewModelScope 范围内共享和缓存
         val newResult: Flow<PagingData<UnsplashPhoto>> =
             repository.getSearchResultStream(queryString).cachedIn(viewModelScope)
         currentSearchResult = newResult

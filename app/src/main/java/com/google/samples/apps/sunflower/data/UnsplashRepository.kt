@@ -23,12 +23,17 @@ import com.google.samples.apps.sunflower.api.UnsplashService
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UnsplashRepository @Inject constructor(private val service: UnsplashService) {
 
-    fun getSearchResultStream(query: String): Flow<PagingData<UnsplashPhoto>> {
+class UnsplashRepository @Inject constructor(
+    private val service: UnsplashService // UnsplashService 依赖由 NetworkModule 提供
+    ) {
+
+    // 根据 UnsplashPagingSource 创建 PagingData flow
+    fun getSearchResultStream(query: String): Flow<PagingData<UnsplashPhoto>> { // (会从PagingSource中检索除一个一个的UnsplashPhoto, 然后通过flow发出去)
+        // Pager 后面会调用PagingSource.load()方法，为其提供LoadParams参数，并接收LoadResult
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE),
-            pagingSourceFactory = { UnsplashPagingSource(service, query) }
+            config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE), // 传入配置类PagingConfig，（在这里，不使用占位符、pageSize=25）
+            pagingSourceFactory = { UnsplashPagingSource(service, query) } // 获取PagingSource的方法
         ).flow
     }
 

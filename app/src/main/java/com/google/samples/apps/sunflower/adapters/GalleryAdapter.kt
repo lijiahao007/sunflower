@@ -36,6 +36,7 @@ import com.google.samples.apps.sunflower.databinding.ListItemPhotoBinding
 class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(GalleryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
+        // 这里的 parent 就是 RecyclerView
         return GalleryViewHolder(
             ListItemPhotoBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -56,9 +57,10 @@ class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(Galle
         private val binding: ListItemPhotoBinding // 把ListItemPhoto的布局信息传入ViewHolder中，这样就可以不用每次取了。
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
-            // 设置整个Item的点击事件 --> 跳转详情页面
+            // 设置整个Item的点击事件 --> 打开对应的图片网页
             binding.setClickListener { view ->
                 binding.photo?.let { photo ->
+                    // 点击后跳转 Unsplash 图片对应用户的主页。
                     val uri = Uri.parse(photo.user.attributionUrl)
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     view.context.startActivity(intent)

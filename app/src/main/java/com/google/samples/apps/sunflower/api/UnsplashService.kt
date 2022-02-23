@@ -28,31 +28,41 @@ import retrofit2.http.Query
 
 /**
  * Used to connect to the Unsplash API to fetch photos
+ * Retrofit2 中和 Unsplash 相关的网络请求接口
  */
 interface UnsplashService {
 
+    // GET 请求： BASE_URL/search/photos
+    // retrofit2 2.6.0 支持协程
     @GET("search/photos")
     suspend fun searchPhotos(
-        @Query("query") query: String,
-        @Query("page") page: Int,
-        @Query("per_page") perPage: Int,
-        @Query("client_id") clientId: String = BuildConfig.UNSPLASH_ACCESS_KEY
+        // @Query 设置 GET 请求方法参数
+        @Query("query") query: String, // 植物名
+        @Query("page") page: Int, // 页数
+        @Query("per_page") perPage: Int, // 每页个数
+        @Query("client_id") clientId: String = BuildConfig.UNSPLASH_ACCESS_KEY // unsplash_access_key
     ): UnsplashSearchResponse
 
+    // 内部伴生类，使用上相当于静态成员
     companion object {
         private const val BASE_URL = "https://api.unsplash.com/"
 
+        // 静态方法
         fun create(): UnsplashService {
+
+            // OKHttp 拦截器， 将所有的请求和响应记录下来
             val logger = HttpLoggingInterceptor().apply { level = Level.BASIC }
 
+            // OKHttpClient
             val client = OkHttpClient.Builder()
                 .addInterceptor(logger)
                 .build()
 
+            // 返回 UnsplashService 实例
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create()) // Gson 数据格式转换
                 .build()
                 .create(UnsplashService::class.java)
         }

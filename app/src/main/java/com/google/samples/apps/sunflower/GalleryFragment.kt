@@ -17,6 +17,7 @@
 package com.google.samples.apps.sunflower
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +38,7 @@ import kotlinx.coroutines.launch
 class GalleryFragment : Fragment() {
 
     private val adapter = GalleryAdapter()
-    private val args: GalleryFragmentArgs by navArgs()  // 跳转时携带的参数
+    private val args: GalleryFragmentArgs by navArgs()  // 跳转时携带的参数 （safeArgs）
     private var searchJob: Job? = null
     private val viewModel: GalleryViewModel by viewModels()
 
@@ -48,8 +49,10 @@ class GalleryFragment : Fragment() {
     ): View {
         val binding = FragmentGalleryBinding.inflate(inflater, container, false)
         context ?: return binding.root
-
+        // 设置 PagingDataAdapter
         binding.photoList.adapter = adapter
+
+        // 用植物名字搜索
         search(args.plantName)
 
         binding.toolbar.setNavigationOnClickListener { view ->
@@ -61,10 +64,16 @@ class GalleryFragment : Fragment() {
 
     private fun search(query: String) {
         // Make sure we cancel the previous job before creating a new one
+        // lifecycleScope 创建的协程与 GalleryFragment的生命周期相关联
+        // 当同一个生命周期内有多个searchJob协程时，先关闭旧的协程，再开启新的协程
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
+            Log.i("Paging3", "GaleeryFragment currentThread = ${Thread.currentThread().name}")
+            // 收集 ViewModel中产生的 Flow
+            // collectLatest: 当上游流发出新值时，前一个值的处理如果没有完成，会被取消。直接开始处理新值
+            // 监听 PagingData 的更新，实时的更新数据
             viewModel.searchPictures(query).collectLatest {
-                adapter.submitData(it)
+                adapter.submitData(it) // lifecycleScope.launch 自动实现了在 Dispatchers.Main 上执行UI更新的操作
             }
         }
     }

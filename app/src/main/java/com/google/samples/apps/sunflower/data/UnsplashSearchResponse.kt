@@ -26,6 +26,7 @@ import com.google.gson.annotations.SerializedName
  * [here](https://unsplash.com/documentation#search-photos).
  */
 data class UnsplashSearchResponse(
+    // GSON json解析
     @field:SerializedName("results") val results: List<UnsplashPhoto>,
     @field:SerializedName("total_pages") val totalPages: Int
 )
