@@ -68,7 +68,6 @@ class GalleryFragment : Fragment() {
         // 当同一个生命周期内有多个searchJob协程时，先关闭旧的协程，再开启新的协程
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
-            Log.i("Paging3", "GaleeryFragment currentThread = ${Thread.currentThread().name}")
             // 收集 ViewModel中产生的 Flow
             // collectLatest: 当上游流发出新值时，前一个值的处理如果没有完成，会被取消。直接开始处理新值
             // 监听 PagingData 的更新，实时的更新数据

@@ -22,9 +22,12 @@ import java.util.Calendar
 /**
  * Type converters to allow Room to reference complex data types.
  */
+// Room 的类型转化器，这样Room就知道如何在数据库中保存Calendar类型数据了
 class Converters {
+    // Calendar -> Long
     @TypeConverter fun calendarToDatestamp(calendar: Calendar): Long = calendar.timeInMillis
 
+    // Long -> Calendar
     @TypeConverter fun datestampToCalendar(value: Long): Calendar =
         Calendar.getInstance().apply { timeInMillis = value }
 }

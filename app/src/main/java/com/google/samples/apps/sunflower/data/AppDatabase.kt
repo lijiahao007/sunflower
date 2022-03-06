@@ -46,7 +46,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
-            return instance ?: synchronized(this) {
+            return instance ?: synchronized(AppDatabase::class) {
                 instance ?: buildDatabase(context).also { instance = it }
             }
         }
@@ -55,13 +55,17 @@ abstract class AppDatabase : RoomDatabase() {
         // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+                // 使用addCallback来将plants.json中的数据预填充到数据库
                 .addCallback(
                     object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
+                            // 在创建数据库的时候运行的逻辑：启动Worker，从 assets/plants.json 中读取数据存在数据库中。
                             super.onCreate(db)
+                            // 创建 OneTimeWorkRequest （只会发生一次请求）
                             val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>()
-                                    .setInputData(workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME))
+                                    .setInputData(workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME)) // 为Worker设置InputData
                                     .build()
+                            // 获取WorkManager，并且启动请求
                             WorkManager.getInstance(context).enqueue(request)
                         }
                     }

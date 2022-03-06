@@ -34,8 +34,10 @@ class SeedDatabaseWorker(
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
+            // inputData 哪里来的？
             val filename = inputData.getString(KEY_FILENAME)
             if (filename != null) {
+                // 打开 main.assets 文件， 读取里面的Json数据，并且插入到数据库中。
                 applicationContext.assets.open(filename).use { inputStream ->
                     JsonReader(inputStream.reader()).use { jsonReader ->
                         val plantType = object : TypeToken<List<Plant>>() {}.type
@@ -48,10 +50,12 @@ class SeedDatabaseWorker(
                     }
                 }
             } else {
+                // filename == null
                 Log.e(TAG, "Error seeding database - no valid filename")
                 Result.failure()
             }
         } catch (ex: Exception) {
+            // 出错
             Log.e(TAG, "Error seeding database", ex)
             Result.failure()
         }

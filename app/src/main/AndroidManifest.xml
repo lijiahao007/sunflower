@@ -39,6 +39,7 @@
             </intent-filter>
         </activity>
 
+<!--        移除默认初始化程序-->
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"

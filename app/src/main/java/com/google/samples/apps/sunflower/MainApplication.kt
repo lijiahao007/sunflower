@@ -22,6 +22,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MainApplication : Application(), Configuration.Provider {
+    // Application 实现 Configuration.Provider ，重写 getWorkManagerConfiguration。 该方法返回自定义的WorkManager配置
     override fun getWorkManagerConfiguration(): Configuration =
                 Configuration.Builder()
                         .setMinimumLoggingLevel(if (BuildConfig.DEBUG) android.util.Log.DEBUG else android.util.Log.ERROR)
